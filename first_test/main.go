@@ -26,7 +26,7 @@ func readLines(path string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-//add func for read
+//add func for read our map
 func getStrings(lines []string) map[string]string {
 
 	m := make(map[string]string)
@@ -37,34 +37,35 @@ func getStrings(lines []string) map[string]string {
 			continue
 		}
 		uStr := strings.TrimSpace(args[0])
-		header := args[1]
+		header := strings.TrimSpace(args[1])
 		m[uStr] = header
 	}
-
 	return m
 }
 
-func MakeRequest(uStr, header string) {
+// add func for our request, and check title
+func makeRequest(uStr, header string) {
 	s, err := goscraper.Scrape(uStr, 5)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	if 	s.Preview.Title != header {
+		fmt.Println(s.Preview.Title)
 		fmt.Println(header)
 	}
 
 }
 
 func main() {
-	lines, err := readLines("foo.in.txt")
+	lines, err := readLines("foo.txt")
 	if err != nil {
 		log.Fatalf("readLines: %s", err)
 	}
 	m := getStrings(lines)
 
 	for u, header := range m {
-		MakeRequest(u, header)
+		makeRequest(u, header)
 
 	}
 
