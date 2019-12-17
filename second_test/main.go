@@ -1,4 +1,4 @@
-package second_test
+package main
 
 import (
 	"bufio"
@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -24,9 +25,9 @@ func readLines(path string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-func getStrings(lines []string) map[string]string {
+func getStrings(lines []string) map[string]int {
 
-	m := make(map[string]string)
+	m := make(map[string]int)
 	for ind, line := range lines {
 		args := strings.Split(line, ",")
 		if len(args) != 2 {
@@ -34,9 +35,12 @@ func getStrings(lines []string) map[string]string {
 			continue
 		}
 		uStr := strings.TrimSpace(args[0])
-		code := args[1]
-		m[uStr] = code
-	}
+		code, err := strconv.ParseInt(strings.TrimSpace(args[1]), 10, 64)
+		if err != nil {
+			fmt.Println(err)
+		}
+		m[uStr] = int(code)
+		}
 
 	return m
 }
@@ -49,13 +53,13 @@ func MakeRequest(uStr string, code int) {
 
 	defer resp.Body.Close()
 	if resp.StatusCode != code {
-		fmt.Printf("Ошибка. http-статус: %s\n", resp.StatusCode)
+		fmt.Printf("Ошибка. http-статус: %d\n", resp.StatusCode)
 		return
 	}
 
 }
 
-func secondTest() {
+func main() {
 	lines, err := readLines("foo.txt")
 	if err != nil {
 		log.Fatalf("readLines: %s", err)

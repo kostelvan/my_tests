@@ -1,0 +1,2 @@
+https://www.ozon.ru/, 200
+https://www.ozon.ru/context/detail/id/0987654567890/, 404
